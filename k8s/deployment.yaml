@@ -41,7 +41,7 @@ spec:
     spec:
       containers:
         - name: fakeshop
-          image: dutradev/fake-shop-desafio:v1
+          image: dutradev/fake-shop-desafio
           ports:
             - containerPort: 5000
           env:
@@ -67,7 +67,7 @@ spec:
     - port: 5432
   selector:
     app: postgre
-    
+
 ---
 apiVersion: v1
 kind: Service

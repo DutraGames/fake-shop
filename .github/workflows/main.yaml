@@ -19,10 +19,14 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Buildando Imagem
-        run: echo "Executar Docker Build"
-
-      - name: Enviando Imagem para Docker Hub
-        run: echo "Executar Docker Push"
+        uses: docker/build-push-action@v6
+        with:
+          context: ./src
+          file: ./src/Dockerfile
+          push: true
+          tags: |
+            dutradev/fake-shop-desafio:latest
+            dutradev/fake-shop-desafio:v${{ github.run_number }}
 
   CD:
     runs-on: ubuntu-latest
@@ -30,3 +34,14 @@ jobs:
     steps:
       - name: Pegando codigo
         uses: actions/checkout@v4.2.2
+
+      - name: Configurando Kubernetes
+        uses: azure/k8s-set-context@v4
+        with:
+          method: kubeconfig
+          kubeconfig: ${{ secrets.K8S_KOBERCONFIG }}
+      - uses: Azure/k8s-deploy@v5
+        with:
+          manifests: |
+            k8s/deplyment.yaml
+          images: dutradev/fake-shop-desafio:v${{ github.run_number }}
