@@ -41,7 +41,7 @@ spec:
     spec:
       containers:
         - name: fakeshop
-          image: dutradev/fake-shop-desafio
+          image: dutradev/fake-shop-desafio:latest
           ports:
             - containerPort: 5000
           env:
